@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js" ></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.3.1/jquery.cookie.min.js"></script>
+    <script src="https://cdn.firebase.com/v0/firebase.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCB-PMzF604-QtRXlcbaAV9I3sU2PUt8JQ&sensor=true"></script>
+  </head>
+  <body>
+    <div id="lat"></div>
+    <div id="lon"></div>
+    <div id="geo-wrapper" style="width: 500px; height: 500px;"></div>
+    <script>
+      function geoSuccess(loc)
+      {
+        fb.child(id).set({ id: id, latitude: loc.coords.latitude, longitude: loc.coords.longitude });
+        $('#lat').html(loc.coords.latitude);
+        $('#lon').html(loc.coords.longitude);
+      }
+
+      function show_map()
+      {
+        var mapOptions = {
+          zoom: 1,
+          center: new google.maps.LatLng(0, 0),
+          mapTypeId: google.maps.MapTypeId.ROADMAP
+        };
+        map = new google.maps.Map($("#geo-wrapper")[0], mapOptions);
+      }
+
+      function show_marker(id, x, y)
+      {
+        if (!markers.hasOwnProperty(id)) {
+          var ll = new google.maps.LatLng(x, y);
+          var marker = new google.maps.Marker({ id: id, position: ll });
+          markers[id] = marker;
+          marker.setMap(map);
+        }
+      }
+
+      function remove_marker(id)
+      {
+        var marker = markers[id];
+        marker.setMap(null);
+      }
+
+      if ($.cookie('id')) {
+        var id = $.cookie('id');
+      } else {
+        var id = Math.random().toString(36).substring(7);
+        $.cookie('id', id);
+      }
+      var fb = new Firebase('https://jnevelson.firebaseIO.com/');
+      var myself = new Firebase('https://jnevelson.firebaseIO.com/' + id);
+      var markers = {};
+
+      myself.onDisconnect().remove();
+
+      fb.on('value', function(snapshot) {
+        if (snapshot.val()) {
+          $.each(snapshot.val(), function(k, obj) {
+            show_marker(obj.id, obj.latitude, obj.longitude);
+          });
+        }
+      });
+
+      fb.on('child_removed', function(child) {
+        remove_marker(child.val().id);
+      });
+
+      $(document).ready(function() {
+        show_map();
+        navigator.geolocation.getCurrentPosition(geoSuccess, null, {enableHighAccuracy:true});
+      });
+    </script>
+  </body>
+</html>
+
