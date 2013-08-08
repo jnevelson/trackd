@@ -21,14 +21,14 @@
       function show_map()
       {
         var mapOptions = {
-          zoom: 1,
-          center: new google.maps.LatLng(0, 0),
+          zoom: 5,
+          center: new google.maps.LatLng(35, -120),
           mapTypeId: google.maps.MapTypeId.ROADMAP
         };
         map = new google.maps.Map($("#geo-wrapper")[0], mapOptions);
       }
 
-      function show_marker(id, x, y)
+      function add_marker(id, x, y)
       {
         if (!markers.hasOwnProperty(id)) {
           var ll = new google.maps.LatLng(x, y);
@@ -41,6 +41,7 @@
       function remove_marker(id)
       {
         var marker = markers[id];
+        delete markers[id];
         marker.setMap(null);
       }
 
@@ -56,12 +57,9 @@
 
       myself.onDisconnect().remove();
 
-      fb.on('value', function(snapshot) {
-        if (snapshot.val()) {
-          $.each(snapshot.val(), function(k, obj) {
-            show_marker(obj.id, obj.latitude, obj.longitude);
-          });
-        }
+      fb.on('child_added', function(child) {
+        var v = child.val();
+        add_marker(v.id, v.latitude, v.longitude);
       });
 
       fb.on('child_removed', function(child) {
