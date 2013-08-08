@@ -28,12 +28,12 @@
         map = new google.maps.Map($("#geo-wrapper")[0], mapOptions);
       }
 
-      function add_marker(id, x, y)
+      function add_marker(child)
       {
-        if (!markers.hasOwnProperty(id)) {
-          var ll = new google.maps.LatLng(x, y);
+        if (!markers.hasOwnProperty(child.id)) {
+          var ll = new google.maps.LatLng(child.latitude, child.longitude);
           var marker = new google.maps.Marker({ id: id, position: ll });
-          markers[id] = marker;
+          markers[child.id] = marker;
           marker.setMap(map);
         }
       }
@@ -58,17 +58,22 @@
       myself.onDisconnect().remove();
 
       fb.on('child_added', function(child) {
-        var v = child.val();
-        add_marker(v.id, v.latitude, v.longitude);
+        add_marker(child.val());
       });
 
       fb.on('child_removed', function(child) {
         remove_marker(child.val().id);
       });
 
+      fb.on('child_changed', function(child) {
+        var v = child.val();
+        remove_marker(v.id);
+        add_marker(v);
+      });
+
       $(document).ready(function() {
         show_map();
-        navigator.geolocation.getCurrentPosition(geoSuccess, null, {enableHighAccuracy:true});
+        navigator.geolocation.watchPosition(geoSuccess, null, {enableHighAccuracy:true});
       });
     </script>
   </body>
