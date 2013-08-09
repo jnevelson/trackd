@@ -22,7 +22,7 @@ function add_user(child)
     var marker = new google.maps.Marker({ id: id, position: ll });
     markers[child.id] = marker;
     marker.setMap(map);
-    $('#connected-count').html(count++);
+    $('#connected-count').html(++count);
   }
 }
 
@@ -31,6 +31,6 @@ function remove_user(id)
   var marker = markers[id];
   delete markers[id];
   marker.setMap(null);
-  $('#connected-count').html(count--);
+  $('#connected-count').html(--count);
 }
 
