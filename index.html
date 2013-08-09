@@ -9,9 +9,10 @@
     <link href="style.css" rel="stylesheet" type="text/css" />
   </head>
   <body>
-    <div id="lat"></div>
-    <div id="lon"></div>
+    Latitude: <span id="lat"></span><br>
+    Longitude: <span id="lon"></span><br>
     <div id="geo-wrapper"></div>
+    Connected users: <span id="connected-count"></span>
     <script>
       if ($.cookie('id')) {
         var id = $.cookie('id');
@@ -22,21 +23,22 @@
       var fb = new Firebase('https://jnevelson.firebaseIO.com/');
       var myself = new Firebase('https://jnevelson.firebaseIO.com/' + id);
       var markers = {};
+      var count = 0;
 
       myself.onDisconnect().remove();
 
       fb.on('child_added', function(child) {
-        add_marker(child.val());
+        add_user(child.val());
       });
 
       fb.on('child_removed', function(child) {
-        remove_marker(child.val().id);
+        remove_user(child.val().id);
       });
 
       fb.on('child_changed', function(child) {
         var v = child.val();
-        remove_marker(v.id);
-        add_marker(v);
+        remove_user(v.id);
+        add_user(v);
       });
 
       $(document).ready(function() {
