@@ -17,12 +17,12 @@ function show_map()
 
 function add_user(child)
 {
+  $('#connected-count').html(++count);
   if (!markers.hasOwnProperty(child.id)) {
     var ll = new google.maps.LatLng(child.latitude, child.longitude);
     var marker = new google.maps.Marker({ id: id, position: ll });
     markers[child.id] = marker;
     marker.setMap(map);
-    $('#connected-count').html(++count);
   }
 }
 
