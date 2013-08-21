@@ -2,7 +2,6 @@
 <html>
   <head>
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js" ></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.3.1/jquery.cookie.min.js"></script>
     <script src="https://cdn.firebase.com/v0/firebase.js"></script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCB-PMzF604-QtRXlcbaAV9I3sU2PUt8JQ&sensor=true"></script>
     <script src="geo.js"></script>
@@ -13,15 +12,11 @@
     Longitude: <span id="lon"></span><br>
     <div id="geo-wrapper"></div>
     Connected users: <span id="connected-count"></span>
+
     <script>
-      if ($.cookie('id')) {
-        var id = $.cookie('id');
-      } else {
-        var id = Math.random().toString(36).substring(7);
-        $.cookie('id', id);
-      }
       var fb = new Firebase('https://jnevelson.firebaseIO.com/');
-      var myself = new Firebase('https://jnevelson.firebaseIO.com/' + id);
+      var myself = fb.push();
+      var id = myself.name()
       var markers = {};
       var count = 0;
 
