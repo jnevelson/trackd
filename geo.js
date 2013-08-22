@@ -1,6 +1,6 @@
 function geoSuccess(loc)
 {
-  fb.child(id).set({ id: id, latitude: loc.coords.latitude, longitude: loc.coords.longitude });
+  myself.set({ id: id, latitude: loc.coords.latitude, longitude: loc.coords.longitude });
   $('#lat').html(loc.coords.latitude);
   $('#lon').html(loc.coords.longitude);
 
