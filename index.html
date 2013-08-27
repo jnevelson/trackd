@@ -8,13 +8,23 @@
     <link href="style.css" rel="stylesheet" type="text/css" />
   </head>
   <body>
-    Latitude: <span id="lat"></span><br>
-    Longitude: <span id="lon"></span><br>
-    <div id="geo-wrapper"></div>
-    Connected users: <span id="connected-count"></span>
+		URL to share: <span id="url"></span><br>
+    <div id="map"></div>
+		<span class='left-item'><b>Latitude:&nbsp</b><span id="lat"></span></span>
+		<span class='item'><b>Longitude:&nbsp</b><span id="lon"></span></span>
+		<span class='item'><b>Connected users:&nbsp</b><span id="connected-count"></span>
 
     <script>
-      var fb = new Firebase('https://jnevelson.firebaseIO.com/');
+			var key = queryHash().q;
+			var url = window.location.href;
+			if (key === undefined) {
+				key = Math.random().toString(36).substr(2, 3);
+				url = window.location.href.split('?')[0] + "?q=" + key;
+				window.location.href = url;
+			}
+			$('#url').html(url);
+
+      var fb = new Firebase('https://jnevelson.firebaseIO.com/' + key);
       var myself = fb.push();
       var id = myself.name()
       var markers = {};

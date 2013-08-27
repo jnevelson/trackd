@@ -1,5 +1,17 @@
-#geo-wrapper {
-  width: 600px;
-  height: 600px;
+body {
+	font-family: Cambria, Georgia, serif;
+}
+
+#map {
+  width: 0px;
+  height: 0px;
+}
+
+.left-item {
+	float: left;
+}
+
+.item {
+	margin-left: 10px;
 }
 

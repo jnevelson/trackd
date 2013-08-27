@@ -14,9 +14,15 @@ function show_map()
     center: new google.maps.LatLng(35, -120),
     mapTypeId: google.maps.MapTypeId.ROADMAP
   };
-  map = new google.maps.Map($("#geo-wrapper")[0], mapOptions);
+  map = new google.maps.Map($("#map")[0], mapOptions);
+	set_dimensions();
+}
 
-  $('#geo-wrapper').css({width: $(window).width(), height: $(window).height()});
+function set_dimensions()
+{
+	var height = $(window).height() - 50;
+	var width = height * (4/3);
+	$('#map').css({width: width, height: height});
 }
 
 function add_user(child)
@@ -34,13 +40,26 @@ function add_user(child)
 
 function remove_user(id)
 {
-  var marker = markers[id];
-  delete markers[id];
-  marker.setMap(null);
-  $('#connected-count').html(--count);
+	var marker = markers[id];
+	delete markers[id];
+	marker.setMap(null);
+	$('#connected-count').html(--count);
 }
 
 function set_center(loc)
 {
   map.setCenter(new google.maps.LatLng(loc.latitude, loc.longitude));
+}
+
+function queryHash()
+{
+	var vars = [], hash;
+	var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+	for (var i = 0; i < hashes.length; i++)
+	{
+			hash = hashes[i].split('=');
+			vars.push(hash[0]);
+			vars[hash[0]] = hash[1];
+	}
+	return vars;
 }
