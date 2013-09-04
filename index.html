@@ -9,16 +9,16 @@
   </head>
   <body>
     <div id="map"></div>
-		<span class='left-item'><b>Latitude:&nbsp</b><span id="lat"></span></span>
-		<span class='item'><b>Longitude:&nbsp</b><span id="lon"></span></span>
-		<span class='item'><b>Connected users:&nbsp</b><span id="connected-count"></span>
+    <span class='left-item'><b>Latitude:&nbsp</b><span id="lat"></span></span>
+    <span class='item'><b>Longitude:&nbsp</b><span id="lon"></span></span>
+    <span class='item'><b>Connected users:&nbsp</b><span id="connected-count"></span>
 
     <script>
-			var key = queryHash().q;
-			if (key === undefined) {
-				key = Math.random().toString(36).substr(2, 8);
-				window.location.href += ("?q=" + key);
-			}
+      var key = queryHash().q;
+      if (key === undefined) {
+        key = Math.random().toString(36).substr(2, 8);
+        window.location.href += ("?q=" + key);
+      }
 
       var fb = new Firebase('https://jnevelson.firebaseIO.com/' + key);
       var myself = fb.push();
