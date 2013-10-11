@@ -1,20 +1,20 @@
 function geoSuccess(loc)
 {
-  myself.set({ id: id, latitude: loc.coords.latitude, longitude: loc.coords.longitude });
-  $('#lat').html(loc.coords.latitude);
-  $('#lon').html(loc.coords.longitude);
+	myself.set({ id: id, latitude: loc.coords.latitude, longitude: loc.coords.longitude });
+	$('#lat').html(loc.coords.latitude);
+	$('#lon').html(loc.coords.longitude);
 
-  set_center(loc.coords);
+	set_center(loc.coords);
 }
 
 function show_map()
 {
-  var mapOptions = {
-    zoom: 6,
-    center: new google.maps.LatLng(35, -120),
-    mapTypeId: google.maps.MapTypeId.ROADMAP
-  };
-  map = new google.maps.Map($("#map")[0], mapOptions);
+	var mapOptions = {
+		zoom: 6,
+		center: new google.maps.LatLng(35, -120),
+		mapTypeId: google.maps.MapTypeId.ROADMAP
+	};
+	map = new google.maps.Map($("#map")[0], mapOptions);
 	set_dimensions();
 }
 
@@ -27,15 +27,15 @@ function set_dimensions()
 
 function add_user(child)
 {
-  $('#connected-count').html(++count);
-  if (!markers.hasOwnProperty(child.id)) {
-    var ll = new google.maps.LatLng(child.latitude, child.longitude);
-    var marker = new google.maps.Marker({ id: id, position: ll });
-    markers[child.id] = marker;
-    marker.setMap(map);
+	$('#connected-count').html(++count);
+	if (!markers.hasOwnProperty(child.id)) {
+		var ll = new google.maps.LatLng(child.latitude, child.longitude);
+		var marker = new google.maps.Marker({ id: id, position: ll });
+		markers[child.id] = marker;
+		marker.setMap(map);
 
-    set_center(child);
-  }
+		set_center(child);
+	}
 }
 
 function remove_user(id)
@@ -48,7 +48,7 @@ function remove_user(id)
 
 function set_center(loc)
 {
-  map.setCenter(new google.maps.LatLng(loc.latitude, loc.longitude));
+	map.setCenter(new google.maps.LatLng(loc.latitude, loc.longitude));
 }
 
 function queryHash()
@@ -57,9 +57,9 @@ function queryHash()
 	var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
 	for (var i = 0; i < hashes.length; i++)
 	{
-			hash = hashes[i].split('=');
-			vars.push(hash[0]);
-			vars[hash[0]] = hash[1];
+		hash = hashes[i].split('=');
+		vars.push(hash[0]);
+		vars[hash[0]] = hash[1];
 	}
 	return vars;
 }
