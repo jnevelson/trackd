@@ -1,52 +1,62 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js" ></script>
-    <script src="https://cdn.firebase.com/v0/firebase.js"></script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCB-PMzF604-QtRXlcbaAV9I3sU2PUt8JQ&sensor=true"></script>
-    <script src="geo.js"></script>
-    <link href="style.css" rel="stylesheet" type="text/css" />
-  </head>
-  <body>
-    <div id="map"></div>
-    <span class='left-item'><b>Latitude:&nbsp</b><span id="lat"></span></span>
-    <span class='item'><b>Longitude:&nbsp</b><span id="lon"></span></span>
-    <span class='item'><b>Connected users:&nbsp</b><span id="connected-count"></span>
+	<head>
+		<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js" ></script>
+		<script src="https://cdn.firebase.com/v0/firebase.js"></script>
+		<script src="http://cdn.leafletjs.com/leaflet-0.6.4/leaflet.js"></script>
+		<script src="geo.js"></script>
+		<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.6.4/leaflet.css" />
+		<link href="style.css" rel="stylesheet" type="text/css" />
 
-    <script>
-      var key = queryHash().q;
-      if (key === undefined) {
-        key = Math.random().toString(36).substr(2, 8);
-        window.location.href += ("?q=" + key);
-      }
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+	</head>
+	<body>
+		<div id="map"></div>
+		<span class='left-item'><b>Latitude:&nbsp</b><span id="lat"></span></span>
+		<span class='item'><b>Longitude:&nbsp</b><span id="lon"></span></span>
+		<span class='item'><b>Connected users:&nbsp</b><span id="connected-count"></span>
 
-      var fb = new Firebase('https://jnevelson.firebaseIO.com/' + key);
-      var myself = fb.push();
-      var id = myself.name()
-      var markers = {};
-      var count = 0;
+		<script>
+			var key = queryHash().q;
+			if (key === undefined) {
+				key = Math.random().toString(36).substr(2, 8);
+				window.location.href += ("?q=" + key);
+			}
 
-      myself.onDisconnect().remove();
+			var fb = new Firebase('https://jnevelson.firebaseIO.com/' + key);
+			var myself = fb.push();
+			var id = myself.name();
+			var markers = {};
+			var count = 0;
+			var	map = L.map('map');
 
-      fb.on('child_added', function(child) {
-        add_user(child.val());
-      });
+			myself.onDisconnect().remove();
 
-      fb.on('child_removed', function(child) {
-        remove_user(child.val().id);
-      });
+			fb.on('child_added', function(child) {
+				userAdded(child.val());
+			});
 
-      fb.on('child_changed', function(child) {
-        var v = child.val();
-        remove_user(v.id);
-        add_user(v);
-      });
+			fb.on('child_removed', function(child) {
+				userLeft(child.val().id);
+			});
 
-      $(document).ready(function() {
-        show_map();
-        navigator.geolocation.watchPosition(geoSuccess, null, {enableHighAccuracy:true});
-      });
-    </script>
-  </body>
+			fb.on('child_changed', function(child) {
+				var v = child.val();
+				userLeft(v.id);
+				userAdded(v);
+			});
+
+			$(document).ready(function() {
+				setupMap();
+				map.locate({setView: true, maxZoom: 16});
+
+				map.on('locationfound', function(e) {
+					myself.set({ id: id, latitude: e.latitude, longitude: e.longitude });
+					$('#lat').html(e.latitude);
+					$('#lon').html(e.longitude);
+				});
+			});
+		</script>
+	</body>
 </html>
 
