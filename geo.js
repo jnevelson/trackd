@@ -1,8 +1,5 @@
 function setupMap() {
-	L.tileLayer('http://{s}.tile.cloudmade.com/35641192757b4ae989dff7e2104f3f7d/997/256/{z}/{x}/{y}.png', {
-		attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://cloudmade.com">CloudMade</a>',
-		maxZoom: 18
-	}).addTo(map);
+	L.tileLayer(cloudmade, { maxZoom: 18 }).addTo(map);
 
 	var height = $(window).height() - 50;
 	var width = height * (4/3);
@@ -18,11 +15,16 @@ function userAdded(child) {
 	}
 }
 
-function userLeft(id) {
-	var marker = markers[id];
-	delete markers[id];
+function userLeft(child) {
+	var marker = markers[child.id];
+	delete markers[child.id];
 	map.removeLayer(marker);
 	$('#connected-count').html(--count);
+}
+
+function userUpdated(child) {
+	userLeft(child);
+	userAdded(child);
 }
 
 function queryHash() {

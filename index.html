@@ -24,11 +24,13 @@
 			}
 
 			var fb = new Firebase('https://jnevelson.firebaseIO.com/' + key);
+			var cloudmade = 'http://{s}.tile.cloudmade.com/35641192757b4ae989dff7e2104f3f7d/997/256/{z}/{x}/{y}.png';
 			var myself = fb.push();
 			var id = myself.name();
 			var markers = {};
 			var count = 0;
 			var	map = L.map('map');
+			var first = true;
 
 			myself.onDisconnect().remove();
 
@@ -41,16 +43,19 @@
 			});
 
 			fb.on('child_changed', function(child) {
-				var v = child.val();
-				userLeft(v.id);
-				userAdded(v);
+				userUpdated(child.val());
 			});
 
 			$(document).ready(function() {
 				setupMap();
-				map.locate({ watch: true, enableHighAccuracy: true, setView: true, maxZoom: 16 });
+				map.locate({ watch: true, enableHighAccuracy: true });
 
 				map.on('locationfound', function(e) {
+					if (first) {
+						map.setView([e.latitude, e.longitude], 16);
+						first = false;
+					}
+
 					myself.set({ id: id, latitude: e.latitude, longitude: e.longitude });
 					$('#lat').html(e.latitude);
 					$('#lon').html(e.longitude);
