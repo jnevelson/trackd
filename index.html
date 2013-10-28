@@ -48,7 +48,7 @@
 
 			$(document).ready(function() {
 				setupMap();
-				map.locate({setView: true, maxZoom: 16});
+				map.locate({ watch: true, enableHighAccuracy: true, setView: true, maxZoom: 16 });
 
 				map.on('locationfound', function(e) {
 					myself.set({ id: id, latitude: e.latitude, longitude: e.longitude });
