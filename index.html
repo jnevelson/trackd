@@ -12,8 +12,6 @@
 	</head>
 	<body>
 		<div id="map"></div>
-		<span class='left-item'><b>Latitude:&nbsp</b><span id="lat"></span></span>
-		<span class='item'><b>Longitude:&nbsp</b><span id="lon"></span></span>
 		<span class='item'><b>Connected users:&nbsp</b><span id="connected-count"></span>
 
 		<script>
@@ -39,7 +37,7 @@
 			});
 
 			fb.on('child_removed', function(child) {
-				userLeft(child.val().id);
+				userLeft(child.val());
 			});
 
 			fb.on('child_changed', function(child) {
@@ -57,8 +55,6 @@
 					}
 
 					myself.set({ id: id, latitude: e.latitude, longitude: e.longitude });
-					$('#lat').html(e.latitude);
-					$('#lon').html(e.longitude);
 				});
 			});
 		</script>
