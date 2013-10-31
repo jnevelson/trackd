@@ -1,9 +1,6 @@
 function setupMap() {
 	L.tileLayer(cloudmade, { maxZoom: 18 }).addTo(map);
-
-	var height = $(window).height() - 50;
-	var width = height * (4/3);
-	$('#map').css({ width: width, height: height });
+	$('#map').css({ height: $(window).height() - 50 });
 }
 
 function userAdded(child) {
