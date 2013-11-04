@@ -54,7 +54,7 @@
 						first = false;
 					}
 
-					myself.set({ id: id, latitude: e.latitude, longitude: e.longitude });
+					myself.set({ id: id, latitude: e.latitude, longitude: e.longitude, updatedAt: +new Date });
 				});
 			});
 		</script>
