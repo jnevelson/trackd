@@ -1,63 +1,21 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js" ></script>
-		<script src="https://cdn.firebase.com/v0/firebase.js"></script>
-		<script src="http://cdn.leafletjs.com/leaflet-0.6.4/leaflet.js"></script>
-		<script src="geo.js"></script>
 		<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.6.4/leaflet.css" />
-		<link href="style.css" rel="stylesheet" type="text/css" />
-
+		<link href="css/style.css" rel="stylesheet" type="text/css" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 	</head>
 	<body>
 		<div id="map"></div>
-		<span class='item'><b>Connected users:&nbsp</b><span id="connected-count"></span>
+		<span class='item'>
+			<b>Connected users:&nbsp</b>
+			<span id="connected-count"></span>
+		</span>
 
-		<script>
-			var key = queryHash().q;
-			if (key === undefined) {
-				key = Math.random().toString(36).substr(2, 8);
-				window.location.href += ("?q=" + key);
-			}
-
-			var fb = new Firebase('https://jnevelson.firebaseIO.com/tracker/' + key);
-			var cloudmade = 'http://{s}.tile.cloudmade.com/35641192757b4ae989dff7e2104f3f7d/997/256/{z}/{x}/{y}.png';
-			var myself = fb.push();
-			var id = myself.name();
-			var markers = {};
-			var count = 0;
-			var	map = L.map('map');
-			var first = true;
-
-			myself.onDisconnect().remove();
-
-			fb.on('child_added', function(child) {
-				userAdded(child.val());
-			});
-
-			fb.on('child_removed', function(child) {
-				userLeft(child.val());
-			});
-
-			fb.on('child_changed', function(child) {
-				userUpdated(child.val());
-			});
-
-			$(document).ready(function() {
-				setupMap();
-				map.locate({ watch: true, enableHighAccuracy: true });
-
-				map.on('locationfound', function(e) {
-					if (first) {
-						map.setView([e.latitude, e.longitude], 16);
-						first = false;
-					}
-
-					myself.set({ id: id, latitude: e.latitude, longitude: e.longitude, updatedAt: +new Date });
-				});
-			});
-		</script>
+		<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js" ></script>
+		<script src="//cdn.firebase.com/v0/firebase.js"></script>
+		<script src="//cdn.leafletjs.com/leaflet-0.6.4/leaflet.js"></script>
+		<script src="js/geo.js"></script>
 	</body>
 </html>
 
