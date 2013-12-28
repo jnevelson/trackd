@@ -44,7 +44,7 @@ $(document).ready(function() {
 	}
 
 	var fb = new Firebase('https://jnevelson.firebaseIO.com/tracker/' + key);
-	var cloudmade = 'http://{s}.tile.cloudmade.com/35641192757b4ae989dff7e2104f3f7d/997/256/{z}/{x}/{y}.png';
+	var cloudmade = 'https://ssl_tiles.cloudmade.com/35641192757b4ae989dff7e2104f3f7d/997/256/{z}/{x}/{y}.png';
 	var myself = fb.push();
 	var id = myself.name();
 	var markers = {};
