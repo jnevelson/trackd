@@ -43,6 +43,11 @@ $(document).ready(function() {
 		window.location.href += ("?q=" + key);
 	}
 
+	if (navigator.userAgent.match(/Android/)) {
+		$('body').prepend("<a id='android_link'>Open in Android app</a>");
+		$('#android_link').attr('href', 'trackd://key/' + key);
+	}
+
 	var fb = new Firebase('https://trackd.firebaseIO.com/' + key);
 	var cloudmade = 'https://ssl_tiles.cloudmade.com/35641192757b4ae989dff7e2104f3f7d/997/256/{z}/{x}/{y}.png';
 	var myself = fb.push();
