@@ -44,8 +44,13 @@ $(document).ready(function() {
 	}
 
 	if (navigator.userAgent.match(/Android/)) {
-		$('body').prepend("<a id='android_link'>Open in Android app</a>");
-		$('#android_link').attr('href', 'trackd://key/' + key);
+		var $link = $('#android_link');
+
+		$link.show();
+		$link.attr('href', 'trackd://key/' + key);
+		$link.click(function() {
+			myself.remove();
+		});
 	}
 
 	var fb = new Firebase('https://trackd.firebaseIO.com/' + key);
