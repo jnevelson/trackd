@@ -45,10 +45,7 @@ $(document).ready(function() {
 
 	if (navigator.userAgent.match(/Android/)) {
 		var $link = $('#android_link');
-
-		$link.attr('href', '/open/' + key).click(function() {
-			myself.remove();
-		}).show();
+		$link.attr('href', '/open/' + key).show();
 	}
 
 	var fb = new Firebase('https://trackd.firebaseIO.com/' + key);
