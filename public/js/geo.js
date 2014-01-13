@@ -43,11 +43,6 @@ $(document).ready(function() {
 		window.location.href += ("?q=" + key);
 	}
 
-	if (navigator.userAgent.match(/Android/)) {
-		var $link = $('#android_link');
-		$link.attr('href', '/open/' + key).show();
-	}
-
 	var fb = new Firebase('https://trackd.firebaseIO.com/' + key);
 	var cloudmade = 'https://ssl_tiles.cloudmade.com/35641192757b4ae989dff7e2104f3f7d/997/256/{z}/{x}/{y}.png';
 	var myself = fb.push();
@@ -58,6 +53,11 @@ $(document).ready(function() {
 	var first = true;
 
 	myself.onDisconnect().remove();
+
+	if (navigator.userAgent.match(/Android/)) {
+		var $link = $('#android_link');
+		$link.attr('href', '/open/' + key + '.' + id).show();
+	}
 
 	fb.on('child_added', function(child) {
 		userAdded(child.val());
